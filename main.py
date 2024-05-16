@@ -1,8 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for
-import time
+import time import sleep
+from machine import Pin
 
 app = Flask(__name__)
 status = "off"
+pin = Pin(25, Pin.OUT)
 
 print(status)
 
@@ -13,9 +15,11 @@ def home():
 @app.route('/on', methods=['GET', 'POST'])
 def on_page():
     if request.method == 'GET':
+        
         return redirect(url_for("home"))
     else:
         status = "on"
+        pin.toggle()
         print(status)
         return render_template("index.html", state="On")
 
@@ -25,6 +29,7 @@ def off_page():
         return redirect(url_for("home"))
     else:
         status = "off"
+        pin.off()
         print(status)
         return render_template("index.html", state="Off")
 
